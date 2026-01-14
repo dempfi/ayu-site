@@ -1,0 +1,72 @@
+---
+import { dark, light, mirage } from 'ayu'
+import type { Scheme } from 'ayu'
+
+function extractColors(scheme: Scheme): Record<string, string> {
+  const colors: Record<string, string> = {}
+
+  for (const [key, color] of Object.entries(scheme.syntax)) {
+    colors[`syntax-${key}`] = color.hex()
+  }
+  colors['syntax-tag-50a'] = scheme.syntax.tag.alpha(0.5).hex()
+
+  colors['editor-fg'] = scheme.editor.fg.hex()
+  colors['editor-bg'] = scheme.editor.bg.hex()
+  colors['editor-line'] = scheme.editor.line.hex()
+  colors['editor-selection-active'] = scheme.editor.selection.active.hex()
+  colors['editor-selection-inactive'] = scheme.editor.selection.inactive.hex()
+  colors['editor-line-number'] = scheme.editor.lineNumber.normal.hex()
+  colors['editor-line-number-active'] = scheme.editor.lineNumber.active.hex()
+  colors['editor-fg-70a'] = scheme.editor.fg.alpha(0.7).hex()
+
+  colors['ui-fg'] = scheme.ui.fg.hex()
+  colors['ui-bg'] = scheme.ui.bg.hex()
+  colors['ui-line'] = scheme.ui.line.hex()
+  colors['ui-panel-bg'] = scheme.ui.panel.bg.hex()
+  colors['ui-panel-shadow'] = scheme.ui.panel.shadow.hex()
+  colors['ui-popup-bg'] = scheme.ui.popup.bg.hex()
+  colors['ui-popup-shadow'] = scheme.ui.popup.shadow.hex()
+
+  colors['accent'] = scheme.common.accent.tint.hex()
+  colors['accent-on'] = scheme.common.accent.on.hex()
+  colors['error'] = scheme.common.error.hex()
+
+  colors['vcs-added'] = scheme.vcs.added.hex()
+  colors['vcs-modified'] = scheme.vcs.modified.hex()
+  colors['vcs-removed'] = scheme.vcs.removed.hex()
+
+  return colors
+}
+
+function toVars(colors: Record<string, string>): string {
+  return Object.entries(colors)
+    .map(([k, v]) => `--${k}: ${v};`)
+    .join('\n  ')
+}
+
+const darkVars = toVars(extractColors(dark))
+const lightVars = toVars(extractColors(light))
+const mirageVars = toVars(extractColors(mirage))
+
+const css = `
+:root {
+  ${darkVars}
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    ${lightVars}
+  }
+}
+
+[data-theme="light"] {
+  ${lightVars}
+}
+
+[data-theme="mirage"] {
+  ${mirageVars}
+}
+`
+---
+
+<Fragment set:html={`<style>${css}</style>`} />

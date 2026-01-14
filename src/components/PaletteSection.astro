@@ -1,0 +1,309 @@
+---
+import { dark, light, mirage } from 'ayu'
+
+const syntaxColors = [
+  {
+    name: 'markup',
+    cssVar: '--syntax-markup',
+    usage: 'Markup emphasis and member variables',
+    hex: { dark: dark.syntax.markup.hex(), light: light.syntax.markup.hex(), mirage: mirage.syntax.markup.hex() },
+  },
+  {
+    name: 'operator',
+    cssVar: '--syntax-operator',
+    usage: 'Language operators',
+    hex: { dark: dark.syntax.operator.hex(), light: light.syntax.operator.hex(), mirage: mirage.syntax.operator.hex() },
+  },
+  {
+    name: 'keyword',
+    cssVar: '--syntax-keyword',
+    usage: 'Language keywords',
+    hex: { dark: dark.syntax.keyword.hex(), light: light.syntax.keyword.hex(), mirage: mirage.syntax.keyword.hex() },
+  },
+  {
+    name: 'func',
+    cssVar: '--syntax-func',
+    usage: 'Function and method names',
+    hex: { dark: dark.syntax.func.hex(), light: light.syntax.func.hex(), mirage: mirage.syntax.func.hex() },
+  },
+  {
+    name: 'special',
+    cssVar: '--syntax-special',
+    usage: 'Decorators and macros',
+    hex: { dark: dark.syntax.special.hex(), light: light.syntax.special.hex(), mirage: mirage.syntax.special.hex() },
+  },
+  {
+    name: 'constant',
+    cssVar: '--syntax-constant',
+    usage: 'Static variables and number literals',
+    hex: { dark: dark.syntax.constant.hex(), light: light.syntax.constant.hex(), mirage: mirage.syntax.constant.hex() },
+  },
+  {
+    name: 'string',
+    cssVar: '--syntax-string',
+    usage: 'Strings literals',
+    hex: { dark: dark.syntax.string.hex(), light: light.syntax.string.hex(), mirage: mirage.syntax.string.hex() },
+  },
+  {
+    name: 'regexp',
+    cssVar: '--syntax-regexp',
+    usage: 'Regular expressions and escape sequences',
+    hex: { dark: dark.syntax.regexp.hex(), light: light.syntax.regexp.hex(), mirage: mirage.syntax.regexp.hex() },
+  },
+  {
+    name: 'entity',
+    cssVar: '--syntax-entity',
+    usage: 'Type and class names',
+    hex: { dark: dark.syntax.entity.hex(), light: light.syntax.entity.hex(), mirage: mirage.syntax.entity.hex() },
+  },
+  {
+    name: 'tag',
+    cssVar: '--syntax-tag',
+    usage: 'HTML/XML tags and builtin type names',
+    hex: { dark: dark.syntax.tag.hex(), light: light.syntax.tag.hex(), mirage: mirage.syntax.tag.hex() },
+  },
+]
+---
+
+<section class='section palette-section' id='palette'>
+  <div class='section-header'>
+    <h2 class='section-title'>Colors with purpose</h2>
+    <p class='section-description'>
+      The palette is carefully tuned for contrast between language features, harmony, and legibility. It's warm and
+      comforting, easy on the eyes, so you can focus on what you're building.
+    </p>
+  </div>
+
+  <div class='color-bands'>
+    {
+      syntaxColors.map((color, index) => (
+        <div
+          class='color-band'
+          style={`
+          --band-color: var(${color.cssVar});
+          --band-index: ${index};
+          --offset-dir: ${index % 2 === 0 ? '-1' : '1'};
+        `}>
+          <span class='band-name'>{color.name}</span>
+          <div class='band-info'>
+            <button
+              class='band-hex'
+              aria-label='Copy hex value'
+              data-hex-dark={color.hex.dark}
+              data-hex-light={color.hex.light}
+              data-hex-mirage={color.hex.mirage}>
+              <span class='hex-value' data-theme-hex='dark'>
+                {color.hex.dark.toUpperCase()}
+              </span>
+              <span class='hex-value' data-theme-hex='light'>
+                {color.hex.light.toUpperCase()}
+              </span>
+              <span class='hex-value' data-theme-hex='mirage'>
+                {color.hex.mirage.toUpperCase()}
+              </span>
+            </button>
+            <span class='band-usage'>{color.usage}</span>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  // Copy functionality
+  document.querySelectorAll('.band-hex').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const theme = document.documentElement.getAttribute('data-theme') || 'dark'
+      const hex = btn.getAttribute(`data-hex-${theme}`)
+      const visibleSpan = btn.querySelector(`.hex-value[data-theme-hex="${theme}"]`) as HTMLSpanElement
+      if (hex && visibleSpan) {
+        await navigator.clipboard.writeText(hex)
+        const original = visibleSpan.textContent
+        visibleSpan.textContent = 'Copied!'
+        setTimeout(() => (visibleSpan.textContent = original), 1000)
+      }
+    })
+  })
+</script>
+
+<style lang='scss'>
+  @use '../styles/theme-mixins' as *;
+
+  .palette-section {
+    display: flex;
+    flex-direction: column;
+    padding: 6rem 0 0 0;
+    min-height: auto;
+  }
+
+  .color-bands {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .color-band {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex: 1;
+    min-height: 300px;
+    height: 75vh;
+    padding: 1.5rem 0.5rem 2rem;
+    background-color: var(--band-color);
+    overflow: hidden;
+  }
+
+  @supports (animation-timeline: view()) {
+    .color-band {
+      animation: reveal 1s linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--band-index) * 5%) entry calc(25% + var(--band-index) * 5%);
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .band-name {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-size: clamp(2rem, calc(75vh / 10), 10rem);
+    font-weight: 1000;
+    text-transform: uppercase;
+    color: var(--editor-fg);
+    user-select: none;
+    line-height: 1;
+    @include blend-text;
+  }
+
+  .band-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+    padding: 0 0.25rem;
+    overflow: hidden;
+  }
+
+  .band-hex {
+    font-family: 'Iosevka Custom', monospace;
+    font-size: clamp(0.75rem, calc(100vw / 40), 1.15rem);
+    color: var(--editor-fg);
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: opacity 0.15s ease;
+    @include blend-text;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .hex-value {
+    display: none;
+
+    &[data-theme-hex='dark'] {
+      display: inline;
+    }
+  }
+
+  // Light theme: show light hex
+  @include for-light-theme {
+    .hex-value[data-theme-hex='dark'] {
+      display: none;
+    }
+    .hex-value[data-theme-hex='light'] {
+      display: inline;
+    }
+  }
+
+  // Mirage: show mirage hex
+  :global([data-theme='mirage']) .hex-value[data-theme-hex='dark'] {
+    display: none;
+  }
+  :global([data-theme='mirage']) .hex-value[data-theme-hex='mirage'] {
+    display: inline;
+  }
+
+  .band-usage {
+    font-size: 0.815rem;
+    color: var(--editor-fg);
+    text-align: center;
+    max-width: 100%;
+    line-height: 1.3;
+    word-break: break-word;
+    height: calc(clamp(0.6rem, calc(75vh / 55), 1.5rem) * 3);
+    display: flex;
+    align-items: flex-start;
+    @include blend-text;
+  }
+
+  @media (max-width: 900px) {
+    .color-bands {
+      flex-wrap: wrap;
+    }
+
+    .color-band {
+      flex: 1 1 20%;
+      min-height: 200px;
+      padding: 1rem 0.25rem;
+    }
+
+    .band-name {
+      font-size: calc(20vw / 1.5);
+    }
+
+    .band-usage {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .palette-section {
+      padding-top: 4rem;
+    }
+
+    .color-bands {
+      flex-direction: column;
+    }
+
+    .color-band {
+      flex-direction: row;
+      min-height: 48px;
+      padding: 0.75rem 1rem;
+    }
+
+    .band-name {
+      writing-mode: horizontal-tb;
+      transform: none;
+      font-size: 1.25rem;
+    }
+
+    .band-info {
+      flex-direction: row;
+      gap: 0.5rem;
+    }
+
+    .band-hex {
+      font-size: 0.875rem;
+    }
+  }
+</style>

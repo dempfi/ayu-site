@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro'
+import ThemeSwitcher from '../components/ThemeSwitcher.astro'
+import CodeSection from '../components/CodeSection.astro'
+import PaletteSection from '../components/PaletteSection.astro'
+import InstallSection from '../components/InstallSection.astro'
+import Footer from '../components/Footer.astro'
+---
+
+<Layout>
+  <ThemeSwitcher />
+  <main>
+    <CodeSection />
+    <PaletteSection />
+    <InstallSection />
+  </main>
+  <Footer />
+</Layout>
+
+<style lang="scss">
+  main {
+    min-height: 100vh;
+  }
+</style>

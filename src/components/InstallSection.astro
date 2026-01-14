@@ -1,0 +1,400 @@
+---
+import ports from '../data/ports.json'
+import DownloadIcon from './icons/DownloadIcon.astro'
+import StarIcon from './icons/StarIcon.astro'
+import ClockIcon from './icons/ClockIcon.astro'
+
+function formatNumber(num: number): string {
+  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`
+  if (num >= 1_000) return `${(num / 1_000).toFixed(1)}k`
+  return num.toString()
+}
+
+function formatDate(date: string): string {
+  const d = new Date(date)
+  const now = new Date()
+  const diff = now.getTime() - d.getTime()
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  if (days < 7) return `${days}d ago`
+  if (days < 30) return `${Math.floor(days / 7)}w ago`
+  if (days < 365) return `${Math.floor(days / 30)}mo ago`
+  return `${Math.floor(days / 365)}y ago`
+}
+
+function isStable(date?: string): boolean {
+  if (!date) return false
+  const d = new Date(date)
+  const now = new Date()
+  const diff = now.getTime() - d.getTime()
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  return days > 365
+}
+
+function formatAuthors(authors: { name: string; link: string }[]): string {
+  if (!authors?.length) return ''
+  const links = authors.map(a => `<a href="${a.link}" target="_blank" rel="noopener">${a.name}</a>`)
+  return `By ${links.join(', ')} • `
+}
+
+type Stats = { installs?: number; stars?: number; rating?: number; lastUpdated?: string }
+
+async function fetchVSCodeStats(extensionId: string): Promise<Stats> {
+  try {
+    const res = await fetch('https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json;api-version=3.0-preview.1' },
+      body: JSON.stringify({
+        filters: [{ criteria: [{ filterType: 7, value: extensionId }] }],
+        flags: 914,
+      }),
+    })
+    const data = await res.json()
+    const ext = data.results?.[0]?.extensions?.[0]
+    const stats = ext?.statistics || []
+    return {
+      installs: stats.find((s: any) => s.statisticName === 'install')?.value || 0,
+      rating: stats.find((s: any) => s.statisticName === 'averagerating')?.value || 0,
+      lastUpdated: ext?.lastUpdated || '',
+    }
+  } catch {
+    return {}
+  }
+}
+
+async function fetchGitHubStats(repo: string): Promise<Stats> {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}`)
+    const data = await res.json()
+    return {
+      stars: data.stargazers_count || 0,
+      lastUpdated: data.pushed_at || '',
+    }
+  } catch {
+    return {}
+  }
+}
+
+async function fetchPackageControlStats(pkg: string): Promise<Stats> {
+  try {
+    const res = await fetch(`https://packagecontrol.io/packages/${pkg}.json`)
+    const data = await res.json()
+    return {
+      installs: data.installs?.total || 0,
+      lastUpdated: data.last_modified || '',
+    }
+  } catch {
+    return {}
+  }
+}
+
+// Fetch stats for all ports
+const statsCache = new Map<string, Stats>()
+
+async function getPortStats(port: any): Promise<Stats> {
+  if (!port.stats) return {}
+
+  const results: Stats = {}
+
+  if (port.stats.vscode) {
+    const cached = statsCache.get(`vscode:${port.stats.vscode}`)
+    if (cached) Object.assign(results, cached)
+    else {
+      const stats = await fetchVSCodeStats(port.stats.vscode)
+      statsCache.set(`vscode:${port.stats.vscode}`, stats)
+      Object.assign(results, stats)
+    }
+  }
+
+  if (port.stats.github) {
+    const cached = statsCache.get(`github:${port.stats.github}`)
+    if (cached) {
+      results.stars = cached.stars
+      if (!results.lastUpdated) results.lastUpdated = cached.lastUpdated
+    } else {
+      const stats = await fetchGitHubStats(port.stats.github)
+      statsCache.set(`github:${port.stats.github}`, stats)
+      results.stars = stats.stars
+      if (!results.lastUpdated) results.lastUpdated = stats.lastUpdated
+    }
+  }
+
+  if (port.stats.packagecontrol) {
+    const cached = statsCache.get(`pc:${port.stats.packagecontrol}`)
+    if (cached) {
+      results.installs = cached.installs
+      if (!results.lastUpdated) results.lastUpdated = cached.lastUpdated
+    } else {
+      const stats = await fetchPackageControlStats(port.stats.packagecontrol)
+      statsCache.set(`pc:${port.stats.packagecontrol}`, stats)
+      results.installs = stats.installs
+      if (!results.lastUpdated) results.lastUpdated = stats.lastUpdated
+    }
+  }
+
+  return results
+}
+
+// Build platforms array with stats (filter out hidden ports)
+const platforms = await Promise.all(
+  ports
+    .filter(p => !p.hidden)
+    .map(async (port, index) => {
+      const stats = await getPortStats(port)
+      return {
+        ...port,
+        ...stats,
+        index,
+      }
+    })
+)
+---
+
+<section class='section install-section' id='install'>
+  <div class='section-header'>
+    <h2 class='section-title'>Everywhere you code</h2>
+    <p class='section-description'>
+      If your tool supports color customization, there's likely an ayu port for it thanks to a wonderful community. If
+      there isn't, build your own with the <a href='https://www.npmjs.com/package/ayu'>ayu-colors</a> npm package.
+    </p>
+  </div>
+
+  <div class='apps-grid'>
+    {
+      platforms.map(platform => {
+        const installs = platform.installs ?? 0
+        const stars = platform.stars ?? 0
+        const rating = platform.rating ?? 0
+        const lastUpdated = platform.lastUpdated ?? ''
+        const authors = platform.authors ?? []
+
+        return (
+          <div
+            class='apps-tile'
+            style={`--tile-color: var(--syntax-${platform.color}); --logo-scale: ${platform.logoScale || 1}; --tile-index: ${platform.index};`}>
+            <div class='tile-logo'>
+              <img src={`/logos/${platform.logo}`} alt={`${platform.name} logo`} />
+            </div>
+            <div class='tile-info'>
+              <div class='tile-name-row'>
+                <span class='tile-name'>{platform.name}</span>
+                {platform.soon && <span class='tile-badge'>soon</span>}
+              </div>
+              <div class='tile-meta'>
+                {installs > 0 && (
+                  <span class='tile-stat' aria-label={`${formatNumber(installs)} installs`}>
+                    <DownloadIcon aria-hidden='true' />
+                    {formatNumber(installs)}
+                  </span>
+                )}
+                {stars > 0 && (
+                  <span class='tile-stat' aria-label={`${formatNumber(stars)} stars`}>
+                    <StarIcon aria-hidden='true' />
+                    {formatNumber(stars)}
+                  </span>
+                )}
+                {rating > 0 && (
+                  <span class='tile-stat' aria-label={`${rating.toFixed(1)} rating`}>
+                    <StarIcon aria-hidden='true' />
+                    {rating.toFixed(1)}
+                  </span>
+                )}
+                {lastUpdated && (
+                  <span class='tile-date' aria-label={`Updated ${formatDate(lastUpdated)}`}>
+                    <ClockIcon aria-hidden='true' />
+                    {isStable(lastUpdated) ? 'Stable' : formatDate(lastUpdated)}
+                  </span>
+                )}
+              </div>
+              <div class='tile-footer'>
+                <Fragment set:html={formatAuthors(authors)} />
+                <a href={platform.link}>Install →</a>
+              </div>
+            </div>
+          </div>
+        )
+      })
+    }
+  </div>
+  <p class='submit-cta'>
+    Want to add your port? <a href='https://github.com/ayu-theme/ayu-colors/issues'>Contribute →</a>
+  </p>
+</section>
+
+<style lang='scss'>
+  .install-section {
+    display: flex;
+    flex-direction: column;
+    padding: 6rem 0;
+    min-height: auto;
+  }
+
+  .submit-cta {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 1rem;
+    color: var(--ui-fg);
+  }
+
+  .submit-cta a {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 370px);
+    justify-content: center;
+    gap: 1rem;
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .apps-tile {
+    position: relative;
+    padding: 1rem 1rem 1rem 1.5rem;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    text-decoration: none;
+    border-radius: 12px;
+    background: transparent;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: tileReveal 0.6s ease forwards;
+    animation-delay: calc(var(--tile-index, 0) * 0.1s);
+    transition: all 0.2s ease;
+  }
+
+  .apps-tile:hover {
+    background: color-mix(in srgb, var(--tile-color) 10%, transparent);
+  }
+
+  @keyframes tileReveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .tile-logo {
+    width: 4rem;
+    height: 4rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tile-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: scale(var(--logo-scale, 1));
+  }
+
+  .tile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: flex-start;
+    gap: 0.375rem;
+    flex: 1;
+    min-width: 0;
+    color: var(--ui-fg);
+  }
+
+  .tile-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tile-name {
+    font-size: 1.75rem;
+    font-weight: 1000;
+    line-height: 1.1;
+    color: var(--tile-color);
+  }
+
+  .tile-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .tile-stat svg,
+  .tile-date svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    margin-right: 0.25rem;
+  }
+
+  .tile-date {
+    font-size: 0.875rem;
+  }
+
+  .tile-footer {
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    :global(a:hover) {
+      color: var(--tile-color);
+    }
+  }
+
+  .tile-badge {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--tile-color);
+    background: color-mix(in srgb, var(--tile-color) 15%, transparent);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .apps-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem 1rem;
+    }
+
+    .tile-logo {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    .tile-name {
+      font-size: 1.125rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .apps-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .apps-tile {
+      gap: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apps-tile {
+      animation: none;
+      opacity: 1;
+    }
+  }
+</style>

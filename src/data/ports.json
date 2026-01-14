@@ -1,0 +1,85 @@
+[
+  {
+    "name": "VS Code",
+    "logo": "vscode.svg",
+    "color": "entity",
+    "link": "https://marketplace.visualstudio.com/items?itemName=teabyii.ayu",
+    "authors": [
+      { "name": "teabyii", "link": "https://github.com/teabyii" },
+      { "name": "dempfi", "link": "https://github.com/dempfi" }
+    ],
+    "stats": { "vscode": "teabyii.ayu" }
+  },
+  {
+    "name": "Sublime Text",
+    "logo": "sublime.svg",
+    "logoScale": 1.05,
+    "color": "keyword",
+    "link": "https://packagecontrol.io/packages/ayu",
+    "authors": [{ "name": "dempfi", "link": "https://github.com/dempfi" }],
+    "stats": {
+      "packagecontrol": "ayu",
+      "github": "dempfi/ayu"
+    }
+  },
+  {
+    "name": "JetBrains",
+    "logo": "jetbrains.svg",
+    "color": "markup",
+    "link": "https://plugins.jetbrains.com/plugin/10318-ayu",
+    "soon": true,
+    "hidden": true
+  },
+  {
+    "name": "Zed",
+    "logo": "zed.svg",
+    "color": "func",
+    "link": "https://github.com/zed-extensions/ayu",
+    "soon": true,
+    "hidden": true
+  },
+  {
+    "name": "Vim",
+    "logo": "vim.svg",
+    "color": "string",
+    "link": "https://github.com/ayu-theme/ayu-vim",
+    "authors": [{ "name": "dempfi", "link": "https://github.com/dempfi" }],
+    "stats": { "github": "ayu-theme/ayu-vim" }
+  },
+  {
+    "name": "Neovim",
+    "logo": "neovim.svg",
+    "color": "string",
+    "link": "https://github.com/Shatur/neovim-ayu",
+    "authors": [{ "name": "Shatur", "link": "https://github.com/Shatur" }],
+    "stats": { "github": "Shatur/neovim-ayu" },
+    "hidden": true
+  },
+  {
+    "name": "iTerm",
+    "logo": "iterm2.png",
+    "logoScale": 1.2,
+    "color": "special",
+    "link": "https://github.com/ayu-theme/ayu-colors",
+    "authors": [{ "name": "dempfi", "link": "https://github.com/dempfi" }],
+    "hidden": true
+  },
+  {
+    "name": "Visual Studio",
+    "logo": "visualstudio.svg",
+    "logoScale": 1.05,
+    "color": "constant",
+    "link": "https://marketplace.visualstudio.com/items?itemName=dempfi.ayu-vs",
+    "authors": [{ "name": "dempfi", "link": "https://github.com/dempfi" }],
+    "stats": { "github": "ayu-theme/visual-studio" }
+  },
+  {
+    "name": "Godot",
+    "logo": "godot.svg",
+    "color": "tag",
+    "link": "https://github.com/Calinou/godot-ayu-theme",
+    "authors": [{ "name": "Calinou", "link": "https://github.com/Calinou" }],
+    "stats": { "github": "Calinou/godot-ayu-theme" },
+    "hidden": true
+  }
+]

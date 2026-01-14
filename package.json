@@ -1,0 +1,21 @@
+{
+  "name": "ayu-site",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.1.1",
+    "ayu": "^9.1.0-beta.0"
+  },
+  "devDependencies": {
+    "@shikijs/transformers": "^2.5.0",
+    "sass": "^1.97.2",
+    "shiki": "^2.5.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

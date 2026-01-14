@@ -1,0 +1,104 @@
+---
+const currentYear = new Date().getFullYear()
+---
+
+<footer class='footer'>
+  <div class='color-bar' aria-hidden='true'></div>
+  <div class='footer-content'>
+    <div class='footer-links'>
+      <a href='https://github.com/ayu-theme' target='_blank' rel='noopener'>GitHub</a>
+      <a href='https://github.com/ayu-theme/ayu-colors/blob/master/license' target='_blank' rel='noopener'
+        >MIT License</a
+      >
+      <a href='mailto:hello@ayutheme.com'>hello@ayutheme.com</a>
+      <a href='https://ko-fi.com/dempfi' target='_blank' rel='noopener'>Buy me a coffee</a>
+    </div>
+    <p class='copyright'>© 2016–{currentYear} • Ayu theme</p>
+  </div>
+</footer>
+
+<style lang='scss'>
+  .footer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--editor-bg);
+  }
+
+  .color-bar {
+    width: 500px;
+    max-width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--syntax-markup),
+      var(--syntax-operator),
+      var(--syntax-keyword),
+      var(--syntax-func),
+      var(--syntax-special),
+      var(--syntax-constant),
+      var(--syntax-string),
+      var(--syntax-regexp),
+      var(--syntax-entity),
+      var(--syntax-tag),
+      var(--syntax-markup)
+    );
+    background-size: 200% 100%;
+    animation: flowColors 12s linear infinite;
+  }
+
+  @keyframes flowColors {
+    from {
+      background-position: 0% 0%;
+    }
+    to {
+      background-position: 200% 0%;
+    }
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    max-width: 1200px;
+    width: 100%;
+    padding: 32px 2rem;
+    color: var(--ui-fg);
+    font-size: 14px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+
+    a {
+      font-weight: 500;
+    }
+  }
+
+  .copyright {
+    margin: 0;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 600px) {
+    .footer-content {
+      padding: 24px 1rem;
+    }
+
+    .footer-links {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .color-bar {
+      animation: none;
+    }
+  }
+</style>

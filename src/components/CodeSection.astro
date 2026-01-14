@@ -1,0 +1,416 @@
+---
+import { createHighlighter } from 'shiki'
+import { ayuShiki } from '../lib/shiki-theme'
+import SunIcon from './icons/SunIcon.astro'
+import SunsetIcon from './icons/SunsetIcon.astro'
+import MoonIcon from './icons/MoonIcon.astro'
+import AyuLogomark from './icons/AyuLogomark.astro'
+
+const highlighter = await createHighlighter({ themes: [ayuShiki], langs: ['rust'] })
+
+const code = `fn quicksort<T: Ord + Clone>(items: &[T]) -> Vec<T> {
+    if items.len() <= 1 { return items.to_vec() }
+    let (pivot, rest) = (items[0].clone(), &items[1..]);
+    let (lo, hi): (Vec<_>, Vec<_>) = rest.iter().cloned().partition(|x| x < &pivot);
+    [quicksort(&lo), vec![pivot], quicksort(&hi)].concat()
+}`
+
+// Variable name pools for dynamic fragment generation (Rust-style)
+const vars = ['n', 'i', 'j', 'len', 'buf', 'val', 'idx', 'src', 'dst', 'res', 'tmp', 'cap', 's', 'v']
+const fns = [
+  'push',
+  'pop',
+  'iter',
+  'map',
+  'filter',
+  'fold',
+  'clone',
+  'parse',
+  'into',
+  'from',
+  'new',
+  'get',
+  'unwrap',
+  'collect',
+]
+const props = ['len', 'cap', 'data', 'next', 'prev', 'key', 'val', 'size', 'ptr', 'inner', 're', 'im']
+
+// Templates with $v (var), $f (fn), $p (prop) placeholders - Rust-style
+const templates = [
+  'let mut $v = $f($v);',
+  'fn $f($v: &str) -> $v',
+  '$v.iter().map(|$v| $v)',
+  'match $v { _ => $v }',
+  'if let Some($v) = $v {',
+  '$v.unwrap_or($v)',
+  'let $v = Vec::new();',
+  '&$v[$v..$v]',
+  '$v as u8',
+  '$v >> $p',
+  '// $v $v',
+  'impl $v for $v {',
+  'pub fn $f(&self) ->',
+  'return Ok($v);',
+  'for $v in $v.iter() {',
+  'let $v = &mut $v;',
+  '$v.len() > 0',
+  'Some($v) => $v,',
+  '$v.is_empty()',
+  'self.$p = $v;',
+  '#[derive($f)]',
+  'where $v: $f',
+  '$v.clone()',
+  'use std::$f::$v;',
+]
+
+// Seeded random for consistent output
+function seededRandom(seed: number) {
+  return () => {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff
+    return seed / 0x7fffffff
+  }
+}
+
+// Generate a code fragment from template with random names
+function generateFragment(rand: () => number): string {
+  const template = templates[Math.floor(rand() * templates.length)]
+  return template
+    .replace(/\$v/g, () => vars[Math.floor(rand() * vars.length)])
+    .replace(/\$f/g, () => fns[Math.floor(rand() * fns.length)])
+    .replace(/\$p/g, () => props[Math.floor(rand() * props.length)])
+}
+
+// Generate gray filler string of approximate target length
+function generateGrayFiller(targetChars: number, seed: number): string {
+  const rand = seededRandom(seed)
+  let result = ''
+  while (result.length < targetChars) {
+    result += generateFragment(rand) + ' '
+  }
+  return result.slice(0, targetChars)
+}
+
+// Build composite lines for code
+function buildCompositeLines(code: string, lineWidth: number, baseSeed: number) {
+  const lines = code.split('\n')
+  const result: { grayLeft: string; realCode: string; grayRight: string }[] = []
+  // Center the code within the filler
+  const maxLineLength = Math.max(...lines.map(l => l.length))
+  const leftOffset = Math.floor((lineWidth - maxLineLength) / 2)
+
+  lines.forEach((line, i) => {
+    const leadingMatch = line.match(/^(\s*)(.*)$/)
+    const indentLen = leadingMatch?.[1]?.length || 0
+    const content = leadingMatch?.[2] || line
+    const totalLeftFiller = leftOffset + indentLen
+    const needsSeparator = content !== ''
+
+    let grayLeft: string
+    if (!needsSeparator) {
+      grayLeft = generateGrayFiller(totalLeftFiller, baseSeed + i * 1000)
+    } else {
+      const baseTarget = Math.max(0, totalLeftFiller - 1)
+      const baseFiller = generateGrayFiller(baseTarget, baseSeed + i * 1000)
+      grayLeft = baseFiller.slice(0, baseTarget) + ' '
+    }
+
+    const rightStart = leftOffset + line.length
+    const rightChars = Math.max(0, lineWidth - rightStart)
+    const grayRight =
+      rightChars > 0
+        ? (needsSeparator ? ' ' : '') +
+          generateGrayFiller(Math.max(0, needsSeparator ? rightChars - 1 : rightChars), baseSeed + i * 2000)
+        : ''
+
+    result.push({ grayLeft, realCode: content, grayRight })
+  })
+
+  const codeCenter = leftOffset + maxLineLength / 2
+  return { lines: result, leftOffset, codeCenter }
+}
+
+// Generate pure gray filler lines
+function generateFillerLines(count: number, lineWidth: number, baseSeed: number): string[] {
+  const lines: string[] = []
+  for (let i = 0; i < count; i++) {
+    lines.push(generateGrayFiller(lineWidth, baseSeed + i * 3000))
+  }
+  return lines
+}
+
+const LINE_WIDTH = 500
+const topFillerLines = generateFillerLines(1, LINE_WIDTH, 99999)
+const bottomFillerLines = generateFillerLines(1, LINE_WIDTH, 88888)
+
+const { lines: codeLines, leftOffset, codeCenter } = buildCompositeLines(code, LINE_WIDTH, 42000)
+const highlighted = highlighter.codeToHtml(code, { lang: 'rust', theme: 'ayu' })
+---
+
+<section class='hero-section' id='code'>
+  <!-- Branding -->
+  <div class='branding'>
+    <AyuLogomark class='logo' aria-label='ayu' />
+    <h1 class='headline'>
+      <span class='c-keyword'>Simple, </span><span class='c-func'>bright,</span>
+      <br />and <span class='c-entity'>elegant</span> theme.<br />
+      <span class='subline'
+        >For any hour — <span class='theme-link' data-theme-value='light'
+          ><span class='icon-day'><SunIcon /></span> day</span
+        >, <span class='theme-link' data-theme-value='mirage'><span class='icon-dusk'><SunsetIcon /></span> dusk</span>, <span
+          class='theme-link'
+          data-theme-value='dark'><span class='icon-night'><MoonIcon /></span> deep night</span
+        >.</span
+      >
+    </h1>
+  </div>
+
+  <!-- Code display -->
+  <div class='code-display' style={`--code-center: ${codeCenter}`}>
+    <div class='code-theme'>
+      {/* prettier-ignore */}
+      <pre><code><span class="filler-top">{topFillerLines.map((line, i) => <span class="line" data-filler={i}><span class="gray">{line}</span></span>)}</span>{codeLines.map((line) => <span class="line"><span class="gray" data-code-filler>{line.grayLeft}</span><span class="placeholder">{line.realCode}</span><span class="gray" data-code-filler>{line.grayRight}</span></span>)}<span class="filler-bottom">{bottomFillerLines.map((line, i) => <span class="line" data-filler={i}><span class="gray">{line}</span></span>)}</span></code></pre>
+
+      <div class='colored-overlay' style={`--left-offset: ${leftOffset}ch`} set:html={highlighted} />
+    </div>
+  </div>
+</section>
+
+<script is:inline define:vars={{ vars, fns, props, templates }}>
+  function generateFragment() {
+    const template = templates[Math.floor(Math.random() * templates.length)]
+    return template
+      .replace(/\$v/g, () => vars[Math.floor(Math.random() * vars.length)])
+      .replace(/\$f/g, () => fns[Math.floor(Math.random() * fns.length)])
+      .replace(/\$p/g, () => props[Math.floor(Math.random() * props.length)])
+  }
+
+  function randomizeFiller() {
+    const allGraySpans = document.querySelectorAll('.code-theme .gray')
+    if (allGraySpans.length === 0) return
+
+    const updateCount = 5 + Math.floor(Math.random() * 4)
+
+    for (let i = 0; i < updateCount; i++) {
+      const idx = Math.floor(Math.random() * allGraySpans.length)
+      const span = allGraySpans[idx]
+      const targetLen = (span.textContent || '').length
+
+      let newText = ''
+      while (newText.length < targetLen) {
+        newText += generateFragment() + ' '
+      }
+      span.textContent = newText.slice(0, targetLen)
+    }
+  }
+
+  setInterval(randomizeFiller, 1000)
+
+  // Theme link click handlers
+  document.querySelectorAll('.theme-link[data-theme-value]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      var theme = link.getAttribute('data-theme-value')
+      if (theme) {
+        document.documentElement.setAttribute('data-theme', theme)
+        localStorage.setItem('ayu-theme', theme)
+      }
+    })
+  })
+</script>
+
+<style lang='scss'>
+  @use '../styles/theme-mixins' as *;
+
+  .hero-section {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow-x: clip;
+  }
+
+  /* Code display */
+  .code-display {
+    display: grid;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .code-theme {
+    display: block;
+    position: relative;
+    grid-area: 1 / 1;
+  }
+
+  .code-theme > pre {
+    margin: 0;
+    background: transparent !important;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .code-theme code,
+  .colored-overlay :global(code) {
+    display: block;
+    font-family: 'Iosevka Custom', 'Fira Code', monospace;
+    font-size: 2rem;
+    line-height: 1.6;
+    transform: translateX(calc(50vw - var(--code-center) * 1ch));
+  }
+
+  .code-theme .line {
+    display: block;
+    white-space: pre;
+  }
+
+  .filler-top,
+  .filler-bottom {
+    display: block;
+  }
+
+  .colored-overlay :global(.line) {
+    display: inline;
+  }
+
+  .code-theme .gray {
+    color: var(--ui-fg);
+    opacity: 0.17;
+    font-variant-ligatures: none;
+  }
+
+  .code-theme .placeholder {
+    color: transparent;
+  }
+
+  .colored-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+  }
+
+  .colored-overlay :global(pre) {
+    margin: 0;
+    background: transparent !important;
+  }
+
+  .colored-overlay :global(code) {
+    padding-left: var(--left-offset);
+    padding-top: 3.2rem; /* 1 line * 1.6 line-height * 2rem font-size */
+  }
+
+  /* Branding - centered at top */
+  .branding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 6rem 2rem;
+    animation: fadeIn 0.4s ease-out both;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .logo {
+    width: 200px;
+    height: auto;
+    margin-bottom: 5rem;
+    color: #22a4e6;
+    filter: drop-shadow(0 2px 2px rgba(34, 164, 230, 0.8)) drop-shadow(0 4px 8px rgba(34, 164, 230, 0.6))
+      drop-shadow(0 8px 20px rgba(34, 164, 230, 0.4)) drop-shadow(0 12px 40px rgba(34, 164, 230, 0.2));
+  }
+
+  .headline {
+    display: block;
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 800;
+    color: var(--editor-fg);
+
+    @include for-light-theme {
+      color: color-mix(in srgb, var(--editor-fg) 40%, var(--editor-bg));
+    }
+  }
+
+  .headline .c-keyword {
+    color: var(--syntax-keyword);
+  }
+  .headline .c-func {
+    color: var(--syntax-func);
+  }
+  .headline .c-entity {
+    color: var(--syntax-entity);
+  }
+
+  .headline .subline {
+    display: block;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--ui-fg);
+    margin-top: 0.5rem;
+  }
+
+  .headline .subline svg {
+    width: 1.1em;
+    height: 1.1em;
+    vertical-align: -0.25em;
+    margin-left: 0.1em;
+  }
+
+  .theme-link {
+    cursor: pointer;
+  }
+
+  .icon-day {
+    color: var(--syntax-func);
+  }
+  .icon-dusk {
+    color: var(--syntax-keyword);
+  }
+  .icon-night {
+    color: var(--syntax-entity);
+  }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .code-theme code,
+    .colored-overlay :global(code) {
+      font-size: 1.5rem;
+    }
+
+    .colored-overlay :global(code) {
+      padding-top: 2.4rem; /* 1 line * 1.6 * 1.5rem */
+    }
+  }
+
+  @media (max-width: 900px) {
+    .branding {
+      padding: 4rem 2rem 3rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .code-theme code,
+    .colored-overlay :global(code) {
+      font-size: 1rem;
+    }
+
+    .colored-overlay :global(code) {
+      padding-top: 1.6rem; /* 1 line * 1.6 * 1rem */
+    }
+
+    .branding {
+      padding: 3rem 1rem 2rem;
+    }
+
+    .logo {
+      width: 140px;
+    }
+  }
+</style>

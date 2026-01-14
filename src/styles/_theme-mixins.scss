@@ -1,0 +1,61 @@
+/// Apply styles for light theme (JS-set or system preference fallback)
+@mixin for-light-theme {
+  @if & {
+    :global([data-theme='light']) & {
+      @content;
+    }
+    @media (prefers-color-scheme: light) {
+      :global(:root:not([data-theme])) & {
+        @content;
+      }
+    }
+  } @else {
+    :global([data-theme='light']) {
+      @content;
+    }
+    @media (prefers-color-scheme: light) {
+      :global(:root:not([data-theme])) {
+        @content;
+      }
+    }
+  }
+}
+
+/// Apply styles for dark themes (dark + mirage, JS-set or system preference fallback)
+@mixin for-dark-theme {
+  @if & {
+    :global([data-theme='dark']) &,
+    :global([data-theme='mirage']) & {
+      @content;
+    }
+    @media (prefers-color-scheme: dark) {
+      :global(:root:not([data-theme])) & {
+        @content;
+      }
+    }
+  } @else {
+    :global([data-theme='dark']),
+    :global([data-theme='mirage']) {
+      @content;
+    }
+    @media (prefers-color-scheme: dark) {
+      :global(:root:not([data-theme])) {
+        @content;
+      }
+    }
+  }
+}
+
+/// Blend mode for text on colored backgrounds (light/dark aware)
+@mixin blend-text {
+  mix-blend-mode: screen;
+  @supports (mix-blend-mode: plus-lighter) {
+    mix-blend-mode: plus-lighter;
+  }
+  @include for-dark-theme {
+    mix-blend-mode: multiply;
+    @supports (mix-blend-mode: plus-darker) {
+      mix-blend-mode: plus-darker;
+    }
+  }
+}

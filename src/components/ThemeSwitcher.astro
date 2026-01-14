@@ -1,0 +1,171 @@
+---
+import SunIcon from './icons/SunIcon.astro'
+import SunsetIcon from './icons/SunsetIcon.astro'
+import MoonIcon from './icons/MoonIcon.astro'
+---
+
+<div class='theme-switcher'>
+  <span class='indicator'></span>
+  <button data-theme-value='light' aria-label='Light theme'>
+    <SunIcon />
+  </button>
+  <button data-theme-value='mirage' aria-label='Mirage theme'>
+    <SunsetIcon />
+  </button>
+  <button data-theme-value='dark' aria-label='Dark theme'>
+    <MoonIcon />
+  </button>
+</div>
+
+<script>
+  const switcher = document.querySelector('.theme-switcher') as HTMLElement
+  const buttons = document.querySelectorAll('.theme-switcher button')
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)')
+
+  function getSystemTheme(): string {
+    return systemDark.matches ? 'dark' : 'light'
+  }
+
+  function setTheme(theme: string, save = true) {
+    document.documentElement.setAttribute('data-theme', theme)
+    if (save) localStorage.setItem('ayu-theme', theme)
+    updateActiveButton(theme)
+  }
+
+  function updateActiveButton(theme: string) {
+    switcher.setAttribute('data-active-theme', theme)
+    buttons.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-theme-value') === theme)
+    })
+  }
+
+  // Initialize: use stored theme, or fall back to system preference
+  const storedTheme = localStorage.getItem('ayu-theme')
+  const initialTheme = storedTheme || getSystemTheme()
+  setTheme(initialTheme, false)
+
+  // Listen for system preference changes (only apply if no manual selection)
+  systemDark.addEventListener('change', () => {
+    if (!localStorage.getItem('ayu-theme')) {
+      setTheme(getSystemTheme(), false)
+    }
+  })
+
+  // Add click listeners
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const theme = btn.getAttribute('data-theme-value')
+      if (theme && theme !== document.documentElement.getAttribute('data-theme')) {
+        setTheme(theme)
+      }
+    })
+  })
+
+  // Sync with external theme changes
+  new MutationObserver(() => {
+    const theme = document.documentElement.getAttribute('data-theme')
+    if (theme) updateActiveButton(theme)
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+</script>
+
+<style lang='scss'>
+  .theme-switcher {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 10000;
+    display: flex;
+    gap: 2px;
+    padding: 4px;
+    background: color-mix(in srgb, var(--ui-bg) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--ui-line);
+    border-radius: 9999px;
+  }
+
+  .indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 36px;
+    height: 36px;
+    background-color: var(--accent);
+    border-radius: 9999px;
+    transition: transform 0.2s ease;
+    pointer-events: none;
+    transform: translateX(0); // light (default)
+  }
+
+  // Indicator position based on active theme (button width 36px + gap 2px = 38px offset)
+  [data-active-theme='mirage'] .indicator {
+    transform: translateX(38px);
+  }
+  [data-active-theme='dark'] .indicator {
+    transform: translateX(76px);
+  }
+
+  button {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--ui-fg);
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  button svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  button:hover:not(.active) {
+    color: var(--editor-fg);
+  }
+
+  button:active {
+    transform: scale(0.98);
+  }
+
+  button.active {
+    color: var(--accent-on);
+  }
+
+  @media (max-width: 600px) {
+    .theme-switcher {
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .indicator {
+      width: 28.8px; // 16px icon + 0.4rem*2 padding
+      height: 28.8px;
+    }
+
+    // Mobile indicator positions (28.8px + 2px gap = 30.8px offset)
+    [data-active-theme='mirage'] .indicator {
+      transform: translateX(30.8px);
+    }
+    [data-active-theme='dark'] .indicator {
+      transform: translateX(61.6px);
+    }
+
+    button {
+      padding: 0.4rem;
+    }
+
+    button svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+</style>

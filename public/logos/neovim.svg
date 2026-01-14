@@ -1,0 +1,22 @@
+<svg viewBox="0 0 602 734" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="nvim-a" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop stop-color="#16B0ED" stop-opacity=".8" offset="0%"/>
+      <stop stop-color="#0F59B2" stop-opacity=".84" offset="100%"/>
+    </linearGradient>
+    <linearGradient id="nvim-b" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop stop-color="#7DB643" offset="0%"/>
+      <stop stop-color="#367533" offset="100%"/>
+    </linearGradient>
+    <linearGradient id="nvim-c" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop stop-color="#88C649" stop-opacity=".8" offset="0%"/>
+      <stop stop-color="#439240" stop-opacity=".84" offset="100%"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" transform="translate(2 3)">
+    <path fill="url(#nvim-a)" d="M0 155.6 155-1v728L0 572.2z"/>
+    <path fill="url(#nvim-b)" d="M443 157 600-1l-3.2 728L442 572.2z" transform="scale(-1 1) translate(-1042 0)"/>
+    <path fill="url(#nvim-c)" d="M155 0l403 615.2L445.2 728 42 114.2z"/>
+    <path fill="#000" fill-opacity=".13" d="M155 283.8l-.2 24.2L31 124.7l11.5-11.7z"/>
+  </g>
+</svg>
