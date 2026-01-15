@@ -84,8 +84,7 @@
   },
   {
     "name": "OpenCode",
-    "logo": "opencode.svg",
-    "logoScale": 0.6,
+    "logo": "opencode.png",
     "color": "entity",
     "link": "https://github.com/postrednik/opencode-ayu-theme",
     "authors": [{ "name": "postrednik", "link": "https://github.com/postrednik/opencode-ayu-theme" }],
