@@ -8,6 +8,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/partytown": "^2.1.4",
     "astro": "^5.1.1",
     "ayu": "^9.1.0-beta.0"
   },

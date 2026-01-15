@@ -51,6 +51,15 @@ const siteUrl = 'https://ayu-theme.com'
         document.documentElement.setAttribute('data-theme', theme)
       })()
     </script>
+
+    <!-- Google Analytics -->
+    <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-5S9Z8QGVC7"></script>
+    <script type="text/partytown">
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-5S9Z8QGVC7');
+    </script>
   </head>
   <body>
     <slot />
