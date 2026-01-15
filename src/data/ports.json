@@ -57,7 +57,7 @@
   },
   {
     "name": "iTerm",
-    "logo": "iterm2.png",
+    "logo": "iterm2.avif",
     "logoScale": 1.2,
     "color": "special",
     "link": "https://github.com/ayu-theme/ayu-colors",
@@ -84,7 +84,7 @@
   },
   {
     "name": "OpenCode",
-    "logo": "opencode.png",
+    "logo": "opencode.avif",
     "color": "entity",
     "link": "https://github.com/postrednik/opencode-ayu-theme",
     "authors": [{ "name": "postrednik", "link": "https://github.com/postrednik/opencode-ayu-theme" }],
