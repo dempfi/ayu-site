@@ -81,5 +81,13 @@
     "authors": [{ "name": "Calinou", "link": "https://github.com/Calinou" }],
     "stats": { "github": "Calinou/godot-ayu-theme" },
     "hidden": true
+  },
+  {
+    "name": "OpenCode",
+    "logo": "opencode.png",
+    "color": "entity",
+    "link": "https://github.com/postrednik/opencode-ayu-theme",
+    "authors": [{ "name": "postrednik", "link": "https://github.com/postrednik/opencode-ayu-theme" }],
+    "stats": { "github": "postrednik/opencode-ayu-theme" }
   }
 ]
