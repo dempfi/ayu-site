@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.4",
+    "@astrojs/sitemap": "^3.7.0",
     "astro": "^5.1.1",
     "ayu": "^9.1.0-beta.0"
   },

@@ -3,62 +3,97 @@ import ThemeStyles from '../components/ThemeStyles.astro'
 
 interface Props {
   title?: string
+  description?: string
+  robots?: string
 }
 
-const { title = 'ayu — Simple, bright, and elegant theme' } = Astro.props
-const description = 'A simple theme with bright colors. Available in three variants — dark, mirage, and light — for any hour of day.'
-const siteUrl = 'https://ayu-theme.com'
+const {
+  title = 'Ayu — Simple, Bright and Elegant Theme',
+  description = 'A modern, bright and elegant color theme for editors. Available in Dark, Mirage, and Light versions to provide visual comfort at any time of day.',
+  robots = 'index, follow',
+} = Astro.props
+
+const canonicalUrl = 'https://ayutheme.com'
+const ogImage = new URL('/images/og-image.avif', Astro.site)
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Ayu Theme',
+  operatingSystem: 'VS Code, Sublime Text',
+  applicationCategory: 'DeveloperTool',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description,
+})
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang='en' data-theme='dark'>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={siteUrl} />
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='description' content={description} />
+    <meta name='robots' content={robots} />
+    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+    <link rel='canonical' href={canonicalUrl} />
 
     <!-- Preload critical font -->
-    <link rel="preload" href="/fonts/IosevkaCustom-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel='preload' href='/fonts/IosevkaCustom-Regular.woff2' as='font' type='font/woff2' crossorigin />
 
     <!-- Google Fonts for Inter (non-blocking, benefits from shared CDN cache) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=optional" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=optional" /></noscript>
+    <link rel='preconnect' href='https://fonts.googleapis.com' />
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+    <link
+      rel='stylesheet'
+      href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=optional'
+      media='print'
+      onload="this.media='all'"
+    />
+    <noscript
+      ><link
+        rel='stylesheet'
+        href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=optional'
+      /></noscript
+    >
 
     <!-- Open Graph -->
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={`${siteUrl}/images/og-image.avif`} />
-    <meta property="og:url" content={siteUrl} />
-    <meta property="og:type" content="website" />
+    <meta property='og:title' content={title} />
+    <meta property='og:description' content={description} />
+    <meta property='og:image' content={ogImage} />
+    <meta property='og:url' content={canonicalUrl} />
+    <meta property='og:type' content='website' />
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={`${siteUrl}/images/og-image.avif`} />
+    <meta name='twitter:card' content='summary_large_image' />
+    <meta name='twitter:title' content={title} />
+    <meta name='twitter:description' content={description} />
+    <meta name='twitter:image' content={ogImage} />
 
     <title>{title}</title>
+    <script type='application/ld+json' set:html={schema} />
     <ThemeStyles />
 
     <!-- Prevent flash of wrong theme -->
     <script is:inline>
-      (function() {
+      ;(function () {
         const theme = localStorage.getItem('ayu-theme') || 'dark'
         document.documentElement.setAttribute('data-theme', theme)
       })()
     </script>
 
     <!-- Google Analytics -->
-    <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-5S9Z8QGVC7"></script>
-    <script type="text/partytown">
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', 'G-5S9Z8QGVC7');
+    <script type='text/partytown' src='https://www.googletagmanager.com/gtag/js?id=G-5S9Z8QGVC7'></script>
+    <script type='text/partytown'>
+      window.dataLayer = window.dataLayer || []
+      window.gtag = function () {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+      gtag('config', 'G-5S9Z8QGVC7')
     </script>
   </head>
   <body>
@@ -66,6 +101,6 @@ const siteUrl = 'https://ayu-theme.com'
   </body>
 </html>
 
-<style is:global lang="scss">
+<style is:global lang='scss'>
   @use '../styles/global.scss';
 </style>
