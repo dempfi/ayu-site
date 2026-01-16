@@ -23,6 +23,15 @@
     }
   },
   {
+    "name": "Xcode",
+    "logo": "xcode.avif",
+    "logoScale": 1.15,
+    "color": "entity",
+    "link": "https://github.com/ayu-theme/ayu-xcode",
+    "authors": [{ "name": "dempfi", "link": "https://github.com/dempfi" }],
+    "stats": { "github": "ayu-theme/ayu-xcode" }
+  },
+  {
     "name": "JetBrains",
     "logo": "jetbrains.svg",
     "color": "markup",
