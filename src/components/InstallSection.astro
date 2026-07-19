@@ -181,6 +181,7 @@ const platforms = await Promise.all(
                 {platform.soon && <span class='tile-badge'>soon</span>}
               </div>
               <div class='tile-meta'>
+                {platform.builtIn && <span class='tile-stat'>Built-in theme · Select in Settings</span>}
                 {installs > 0 && (
                   <span class='tile-stat' aria-label={`${formatNumber(installs)} installs`}>
                     <DownloadIcon aria-hidden='true' />
@@ -208,7 +209,7 @@ const platforms = await Promise.all(
               </div>
               <div class='tile-footer'>
                 <Fragment set:html={formatAuthors(authors)} />
-                <a href={platform.link}>Install →</a>
+                <a href={platform.link}>{platform.builtIn ? 'Get app →' : 'Install →'}</a>
               </div>
             </div>
           </div>

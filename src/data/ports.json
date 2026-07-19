@@ -11,6 +11,14 @@
     "stats": { "vscode": "teabyii.ayu" }
   },
   {
+    "name": "ChatGPT",
+    "logo": "chatgpt.avif",
+    "logoScale": 1.15,
+    "color": "special",
+    "link": "https://chatgpt.com/download",
+    "builtIn": true
+  },
+  {
     "name": "Sublime Text",
     "logo": "sublime.svg",
     "logoScale": 1.05,
