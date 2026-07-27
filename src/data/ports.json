@@ -114,5 +114,13 @@
     "link": "https://github.com/iodic/obsidian-ayu-theme",
     "authors": [{ "name": "iodic", "link": "https://github.com/iodic" }],
     "stats": { "github": "iodic/obsidian-ayu-theme" }
+  },
+  {
+    "name": "Github",
+    "logo": "github.png",
+    "color": "constant",
+    "link": "https://github.com/dayvster/ayu-github",
+    "authors": [{ "name": "dayvster", "link": "https://github.com/dayvster" }],
+    "stats": { "github": "dayvster/ayu-github" }
   }
 ]
