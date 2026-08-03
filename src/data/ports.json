@@ -114,5 +114,62 @@
     "link": "https://github.com/iodic/obsidian-ayu-theme",
     "authors": [{ "name": "iodic", "link": "https://github.com/iodic" }],
     "stats": { "github": "iodic/obsidian-ayu-theme" }
+  },
+  {
+    "name": "Ghostty",
+    "logo": "ayu-port.svg",
+    "color": "string",
+    "link": "https://github.com/St1ggy/ayu-ghostty",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-ghostty" }
+  },
+  {
+    "name": "Zellij",
+    "logo": "ayu-port.svg",
+    "color": "func",
+    "link": "https://github.com/St1ggy/ayu-zellij",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-zellij" }
+  },
+  {
+    "name": "Codex",
+    "logo": "chatgpt.avif",
+    "logoScale": 1.15,
+    "color": "special",
+    "link": "https://github.com/St1ggy/ayu-codex",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-codex" }
+  },
+  {
+    "name": "Posting",
+    "logo": "ayu-port.svg",
+    "color": "entity",
+    "link": "https://github.com/St1ggy/ayu-posting",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-posting" }
+  },
+  {
+    "name": "delta",
+    "logo": "ayu-port.svg",
+    "color": "constant",
+    "link": "https://github.com/St1ggy/ayu-delta",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-delta" }
+  },
+  {
+    "name": "Powerlevel10k",
+    "logo": "ayu-port.svg",
+    "color": "keyword",
+    "link": "https://github.com/St1ggy/ayu-powerlevel10k",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-powerlevel10k" }
+  },
+  {
+    "name": "Telegram",
+    "logo": "ayu-port.svg",
+    "color": "tag",
+    "link": "https://github.com/St1ggy/ayu-telegram",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-telegram" }
   }
 ]
