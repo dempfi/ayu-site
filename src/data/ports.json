@@ -117,7 +117,7 @@
   },
   {
     "name": "Ghostty",
-    "logo": "ayu-port.svg",
+    "logo": "ghostty.svg",
     "color": "string",
     "link": "https://github.com/St1ggy/ayu-ghostty",
     "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
@@ -125,7 +125,8 @@
   },
   {
     "name": "Zellij",
-    "logo": "ayu-port.svg",
+    "logo": "https://raw.githubusercontent.com/zellij-org/zellij/main/assets/logo.svg",
+    "logoScale": 0.9,
     "color": "func",
     "link": "https://github.com/St1ggy/ayu-zellij",
     "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
@@ -142,7 +143,7 @@
   },
   {
     "name": "Posting",
-    "logo": "ayu-port.svg",
+    "logo": "posting.svg",
     "color": "entity",
     "link": "https://github.com/St1ggy/ayu-posting",
     "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
@@ -150,7 +151,7 @@
   },
   {
     "name": "delta",
-    "logo": "ayu-port.svg",
+    "logo": "git.svg",
     "color": "constant",
     "link": "https://github.com/St1ggy/ayu-delta",
     "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
@@ -158,7 +159,7 @@
   },
   {
     "name": "Powerlevel10k",
-    "logo": "ayu-port.svg",
+    "logo": "zsh.svg",
     "color": "keyword",
     "link": "https://github.com/St1ggy/ayu-powerlevel10k",
     "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
@@ -166,7 +167,7 @@
   },
   {
     "name": "Telegram",
-    "logo": "ayu-port.svg",
+    "logo": "telegram.svg",
     "color": "tag",
     "link": "https://github.com/St1ggy/ayu-telegram",
     "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],

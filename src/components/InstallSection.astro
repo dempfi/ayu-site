@@ -167,13 +167,14 @@ const platforms = await Promise.all(
         const rating = platform.rating ?? 0
         const lastUpdated = platform.lastUpdated ?? ''
         const authors = platform.authors ?? []
+        const logo = platform.logo.startsWith('http') ? platform.logo : `/logos/${platform.logo}`
 
         return (
           <div
             class='apps-tile'
             style={`--tile-color: var(--syntax-${platform.color}); --logo-scale: ${platform.logoScale || 1}; --tile-index: ${platform.index};`}>
             <div class='tile-logo'>
-              <img src={`/logos/${platform.logo}`} alt={`${platform.name} logo`} />
+              <img src={logo} alt={`${platform.name} logo`} />
             </div>
             <div class='tile-info'>
               <div class='tile-name-row'>
