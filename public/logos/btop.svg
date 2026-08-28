@@ -1,0 +1,25 @@
+<svg role="img" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+  <title>btop++</title>
+  <defs>
+    <pattern id="red-stripes" width="341" height="90" patternUnits="userSpaceOnUse">
+      <path fill="#f00" d="M0 0h341v16H0z" />
+      <path fill="#d70000" d="M0 16h341v16H0z" />
+      <path fill="#af0000" d="M0 32h341v16H0z" />
+      <path fill="#870000" d="M0 48h341v16H0z" />
+      <path fill="#5f0000" d="M0 64h341v16H0z" />
+    </pattern>
+    <pattern id="gray-stripes" width="341" height="90" patternUnits="userSpaceOnUse">
+      <path fill="#585858" d="M0 0h341v16H0z" />
+      <path fill="#4e4e4e" d="M0 16h341v16H0z" />
+      <path fill="#444" d="M0 32h341v16H0z" />
+      <path fill="#3a3a3a" d="M0 48h341v16H0z" />
+      <path fill="#303030" d="M0 64h341v16H0z" />
+      <path fill="#262626" d="M0 80h341v10H0z" />
+    </pattern>
+  </defs>
+  <g transform="translate(18)">
+    <path fill="#080808" d="M2 7v83h45V74h7V55h-7V42h7V23h-7V7Zm17 19h18v13H19Zm0 32h18v13H19Z" />
+    <path fill="url(#gray-stripes)" d="M2 7v83h45V74h7V55h-7V42h7V23h-7V7Zm1 1h43v16h7v17h-7v15h7v17h-7v16H3Zm15 17h20v15H18Zm1 1v13h18V26Zm-1 31h20v15H18Zm1 1v13h18V58ZM4 9v79h41V72h7V57h-7V40h7V25h-7V9Zm1 1h39v16h7v13h-7v19h7v13h-7v16H5Zm11 13h24v19H16Zm1 1v17h22V24Zm-1 31h24v19H16Zm1 1v17h22V56Z" />
+    <path fill="url(#red-stripes)" d="M0 0v80h42V64h7V48h-7V32h7V16h-7V0Zm14 16h21v16H14Zm0 32h21v16H14Z" />
+  </g>
+</svg>

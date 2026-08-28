@@ -114,5 +114,71 @@
     "link": "https://github.com/iodic/obsidian-ayu-theme",
     "authors": [{ "name": "iodic", "link": "https://github.com/iodic" }],
     "stats": { "github": "iodic/obsidian-ayu-theme" }
+  },
+  {
+    "name": "Ghostty",
+    "logo": "ghostty.svg",
+    "color": "string",
+    "link": "https://github.com/St1ggy/ayu-ghostty",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-ghostty" }
+  },
+  {
+    "name": "Zellij",
+    "logo": "https://raw.githubusercontent.com/zellij-org/zellij/main/assets/logo.svg",
+    "logoScale": 0.9,
+    "color": "func",
+    "link": "https://github.com/St1ggy/ayu-zellij",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-zellij" }
+  },
+  {
+    "name": "Codex",
+    "logo": "chatgpt.avif",
+    "logoScale": 1.15,
+    "color": "special",
+    "link": "https://github.com/St1ggy/ayu-codex",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-codex" }
+  },
+  {
+    "name": "Posting",
+    "logo": "posting.svg",
+    "color": "entity",
+    "link": "https://github.com/St1ggy/ayu-posting",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-posting" }
+  },
+  {
+    "name": "delta",
+    "logo": "git.svg",
+    "color": "constant",
+    "link": "https://github.com/St1ggy/ayu-delta",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-delta" }
+  },
+  {
+    "name": "Powerlevel10k",
+    "logo": "zsh.svg",
+    "color": "keyword",
+    "link": "https://github.com/St1ggy/ayu-powerlevel10k",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-powerlevel10k" }
+  },
+  {
+    "name": "Telegram",
+    "logo": "telegram.svg",
+    "color": "tag",
+    "link": "https://github.com/St1ggy/ayu-telegram",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-telegram" }
+  },
+  {
+    "name": "btop++",
+    "logo": "btop.svg",
+    "color": "keyword",
+    "link": "https://github.com/St1ggy/ayu-btop",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-btop" }
   }
 ]
