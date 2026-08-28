@@ -172,5 +172,13 @@
     "link": "https://github.com/St1ggy/ayu-telegram",
     "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
     "stats": { "github": "St1ggy/ayu-telegram" }
+  },
+  {
+    "name": "btop++",
+    "logo": "btop.svg",
+    "color": "keyword",
+    "link": "https://github.com/St1ggy/ayu-btop",
+    "authors": [{ "name": "St1ggy", "link": "https://github.com/St1ggy" }],
+    "stats": { "github": "St1ggy/ayu-btop" }
   }
 ]
