@@ -118,7 +118,7 @@
   {
     "name": "Pragtical",
     "logo": "pragtical.svg",
-    "color": "constant",
+    "color": "entity",
     "link": "https://github.com/juliardi/pragtical-ayu-theme",
     "authors": [{ "name": "juliardi", "link": "https://github.com/juliardi" }],
     "stats": { "github": "juliardi/pragtical-ayu-theme" }
