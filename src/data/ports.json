@@ -114,5 +114,13 @@
     "link": "https://github.com/iodic/obsidian-ayu-theme",
     "authors": [{ "name": "iodic", "link": "https://github.com/iodic" }],
     "stats": { "github": "iodic/obsidian-ayu-theme" }
+  },
+  {
+    "name": "Pragtical",
+    "logo": "pragtical.svg",
+    "color": "constant",
+    "link": "https://github.com/juliardi/pragtical-ayu-theme",
+    "authors": [{ "name": "juliardi", "link": "https://github.com/juliardi" }],
+    "stats": { "github": "juliardi/pragtical-ayu-theme" }
   }
 ]
