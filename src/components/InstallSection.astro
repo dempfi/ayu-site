@@ -64,7 +64,10 @@ async function fetchVSCodeStats(extensionId: string): Promise<Stats> {
 
 async function fetchGitHubStats(repo: string): Promise<Stats> {
   try {
-    const res = await fetch(`https://api.github.com/repos/${repo}`)
+    const token = import.meta.env.GITHUB_TOKEN
+    const res = await fetch(`https://api.github.com/repos/${repo}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
     const data = await res.json()
     return {
       stars: data.stargazers_count || 0,

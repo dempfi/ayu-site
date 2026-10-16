@@ -49,11 +49,10 @@
   },
   {
     "name": "Zed",
-    "logo": "zed.svg",
+    "logo": "zed.avif",
     "color": "func",
-    "link": "https://github.com/zed-extensions/ayu",
-    "soon": true,
-    "hidden": true
+    "link": "https://zed.dev/download",
+    "builtIn": true
   },
   {
     "name": "Vim",
